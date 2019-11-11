@@ -1,14 +1,23 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneBook_Models
 {
-	public class Contact
+    [Table("contact")]
+    public class Contact
 	{
-		public int Id { get; set; }
+        [Key]
+        [Column("contact_id")]
+        public int ContactId { get; set; }
 		[Display(Name = "First name"), Required(ErrorMessage = "First name is required")]
-		public string FirstName { get; set; }
+        [Column("first_name")]
+        public string FirstName { get; set; }
 		[Display(Name = "Last name"), Required(ErrorMessage = "Last name is required")]
-		public string LastName { get; set; }
-	}
+        [Column("last_name")]
+        public string LastName { get; set; }
+        [Display(Name = "Telephone number"), Required(ErrorMessage = "Telephone number is required")]
+        [Column("telephone_number")]
+        public string TelephoneNumber { get; set; }
+    }
 }

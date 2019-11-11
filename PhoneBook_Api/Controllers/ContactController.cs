@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
+using PhoneBook_Api.Dal;
 using PhoneBook_Models;
 
 namespace PhoneBook_Api.Controllers
@@ -14,11 +15,18 @@ namespace PhoneBook_Api.Controllers
     public class ContactController : ControllerBase
     {
 
+        private readonly PhoneBookContext _context;
+
+        public ContactController(PhoneBookContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/Contact
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Contact>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await _context.Contacts.ToListAsync();
         }
 
         // GET: api/Contact/5
@@ -30,9 +38,12 @@ namespace PhoneBook_Api.Controllers
 
         // POST: api/Contact
         [HttpPost]
-        public void Post([FromBody] Contact value)
+        public async Task<ActionResult<Contact>> Post([FromBody] Contact contact)
         {
+            _context.Contacts.Add(contact);
+            await _context.SaveChangesAsync();
 
+            return CreatedAtAction("Get", new { id = contact.ContactId }, contact);
         }
 
         // PUT: api/Contact/5
