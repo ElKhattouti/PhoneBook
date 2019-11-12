@@ -1,65 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Options;
 using PhoneBook_Models;
+using PhoneBook_Web.Services;
 
 namespace PhoneBook_Web.Controllers
 {
     public class ContactController : Controller
     {
-		private static List<Contact> _contacts=new List<Contact>();
+        private readonly ApiService _api = ApiService.Api;
 
         // GET: Contact
         public ActionResult Index()
         {
-            return View(_contacts);
+            var contacts = _api.Get().Result;
+            return View(contacts);
         }
 
         // GET: Contact/Details/5
         public ActionResult Details(int id)
         {
-            return View(_contacts[id]);
+            var contact = _api.Get(id).Result;
+            return View(contact);
         }
 
         // GET: Contact/Create
         public ActionResult Create()
         {
-
             return View();
         }
 
         // POST: Contact/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-		public ActionResult Create([Bind("FirstName,LastName,TelephoneNumber")] Contact contact)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(contact);
-			}
-
-			try
-			{
-				// TODO: Add create logic here
-				_contacts.Add(contact);
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
-
-
-
-		// GET: Contact/Edit/5
-		public ActionResult Edit(int id)
+        public ActionResult Create([Bind("FirstName,LastName,TelephoneNumber")] Contact contact)
         {
-            return View(_contacts[id]);
+            if (!ModelState.IsValid)
+            {
+                return View(contact);
+            }
+
+            try
+            {
+                contact = _api.Post(contact).Result;
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+
+        // GET: Contact/Edit/5
+        public ActionResult Edit(int id)
+        {
+            var contact = _api.Get(id).Result;
+            return View(contact);
         }
 
         // POST: Contact/Edit/5
@@ -67,11 +65,11 @@ namespace PhoneBook_Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, [Bind("ContactId,FirstName,LastName,TelephoneNumber")] Contact contact)
         {
-            if(id!=contact.ContactId)
+            if (id != contact.ContactId)
                 return View(contact);
             try
             {
-				_contacts[id] = contact;
+                contact = _api.Put(contact).Result;
                 return RedirectToAction(nameof(Index));
             }
             catch

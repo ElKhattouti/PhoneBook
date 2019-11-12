@@ -20,4 +20,7 @@
     <ProjectReference Include="..\PhoneBook_Models\PhoneBook_Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>
