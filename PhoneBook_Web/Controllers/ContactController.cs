@@ -65,8 +65,10 @@ namespace PhoneBook_Web.Controllers
         // POST: Contact/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, [Bind("FirstName,LastName,TelephoneNumber")] Contact contact)
+        public ActionResult Edit(int id, [Bind("ContactId,FirstName,LastName,TelephoneNumber")] Contact contact)
         {
+            if(id!=contact.ContactId)
+                return View(contact);
             try
             {
 				_contacts[id] = contact;
@@ -78,27 +80,27 @@ namespace PhoneBook_Web.Controllers
             }
         }
 
-        // GET: Contact/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //// GET: Contact/Delete/5
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
-        // POST: Contact/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
+        //// POST: Contact/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add delete logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }
