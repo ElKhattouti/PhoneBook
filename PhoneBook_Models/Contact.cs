@@ -16,8 +16,10 @@ namespace PhoneBook_Models
 		[Display(Name = "Last name"), Required(ErrorMessage = "Last name is required")]
         [Column("last_name")]
         public string LastName { get; set; }
-        [Display(Name = "Telephone number"), Required(ErrorMessage = "Telephone number is required")]
+
         [Column("telephone_number")]
+        [Display(Name = "Telephone number"), Required(ErrorMessage = "Telephone number is required")]
+        [RegularExpression("^([+][0-9]+) [0-9]+ [0-9]{6,}$", ErrorMessage = "Telephone number is invalid")]
         public string TelephoneNumber { get; set; }
     }
 }

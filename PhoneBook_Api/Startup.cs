@@ -17,8 +17,11 @@ namespace PhoneBook_Api
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+        private readonly IHostEnvironment _currentEnvironment;
+
+        public Startup(IConfiguration configuration, IHostEnvironment env)
 		{
+            _currentEnvironment = env;
 			Configuration = configuration;
 		}
 
@@ -31,6 +34,7 @@ namespace PhoneBook_Api
             services.AddDbContext<PhoneBookContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("PhoneBookContext"))
             );
+            
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
